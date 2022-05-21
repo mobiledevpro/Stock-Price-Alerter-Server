@@ -1,24 +1,20 @@
 package com.mobiledevpro
 
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import com.mobiledevpro.plugins.*
+import com.mobiledevpro.models.Version
+import com.mobiledevpro.plugins.configureHTTP
+import com.mobiledevpro.plugins.configureRouting
+import com.mobiledevpro.plugins.configureSerialization
 import io.ktor.server.application.*
+import io.ktor.server.netty.*
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
+
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
-    configureRouting()
     configureSerialization()
     configureHTTP()
 }
 
-/*
-fun main() {
-    embeddedServer(Netty, port = 8081, host = "0.0.0.0") {
-        configureRouting()
-    }.start(wait = true)
+fun Application.moduleV1() {
+    configureRouting(Version.V1)
 }
-
-
- */
