@@ -1,15 +1,12 @@
 package com.mobiledevpro
 
-import io.ktor.server.routing.*
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
+import com.mobiledevpro.plugins.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import kotlin.test.*
+import io.ktor.http.*
 import io.ktor.server.testing.*
-import com.mobiledevpro.plugins.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ApplicationTest {
     @Test
@@ -20,6 +17,18 @@ class ApplicationTest {
         client.get("/").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("Hello World!", bodyAsText())
+        }
+    }
+
+    @Test
+    fun testCustomer() = testApplication {
+        application {
+            configureRouting()
+        }
+
+        client.get("/customer").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("No customers found", bodyAsText())
         }
     }
 }
