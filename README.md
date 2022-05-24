@@ -1,12 +1,25 @@
 # Stock-Price-Alerter-Server
 
 ## Logic Scheme
+
 ![Logic Scheme](doc/logic_scheme.png)
 
 ## Run
+
 Execute the following command in a repository's root directory:
+
 ```shell
 ./gradlew run
+```
+
+## Deploy to AWS
+
+Doc https://ktor.io/docs/elastic-beanstalk.html#configure-shadow-plugin
+
+Build a JAR
+
+```shell
+./gradlew :shadowJar
 ```
 
 ## Get in touch
