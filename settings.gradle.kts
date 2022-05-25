@@ -1,1 +1,1 @@
-rootProject.name = "com.mobiledevpro.stock-price-alerter-server"
+rootProject.name = "com.mobiledevpro.stock-price-alerter"

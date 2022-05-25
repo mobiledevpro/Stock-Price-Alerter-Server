@@ -16,10 +16,45 @@ Execute the following command in a repository's root directory:
 
 Doc https://ktor.io/docs/elastic-beanstalk.html#configure-shadow-plugin
 
-Build a JAR
+Build a JAR and upload it manually via https://aws.amazon.com/ru/console/
 
 ```shell
 ./gradlew :shadowJar
+```
+
+## Deploy to Heroku
+
+Doc https://ktor.io/docs/heroku.html#stage
+
+* Create Procfile and add the following content ('com.mobiledevpro.stock-price-alerter' is a projectName from
+  settings.gradle.kts)
+
+```shell
+web: ./build/install/com.mobiledevpro.stock-price-alerter/bin/com.mobiledevpro.stock-price-alerter
+``` 
+
+* Login to Heroku
+
+```shell
+heroku login
+```
+
+* Create Heroku app
+
+```shell
+heroku create stock-price-alerter
+```
+
+* Add Heroku remote branch to local machine
+
+```shell
+heroku git:remote -a stock-price-alerter
+```
+
+* Push your master branch to Heroku
+
+```shell
+git push heroku master
 ```
 
 ## Get in touch
