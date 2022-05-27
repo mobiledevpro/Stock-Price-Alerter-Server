@@ -9,11 +9,22 @@ jobs:
     steps:
       - checkout
       - heroku/install
+      - heroku/check-authentication
+      - run:
+          name: Check if Heroku is installed
+          command: |
+            if [[ $(command -v heroku) == "" ]]; then
+             echo "Heroku is not installed!"; exit 1;
+            else
+             echo Heroku successfully installed.
+            fi
       - run:
           command: >
             echo "The command above installs Heroku, the command below deploys.
             What you do inbetween is up to you!"
-      - heroku/deploy-via-git
+      - heroku/deploy-via-git:
+          force: true
+          app-name: stock-price-alerter
 
 workflows:
   heroku_deploy:
