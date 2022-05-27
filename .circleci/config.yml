@@ -9,7 +9,6 @@ jobs:
     steps:
       - checkout
       - heroku/install
-      - heroku/check-authentication
       - run:
           name: Check if Heroku is installed
           command: |
@@ -18,6 +17,7 @@ jobs:
             else
              echo Heroku successfully installed.
             fi
+      - heroku/check-authentication
       - run:
           command: >
             echo "The command above installs Heroku, the command below deploys.
