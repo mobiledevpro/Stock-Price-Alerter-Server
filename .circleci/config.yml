@@ -4,7 +4,7 @@ orbs:
   orb-tools: circleci/orb-tools@10
 
 jobs:
-  deploy:
+  job_deploy:
     executor: heroku/default
     steps:
       - checkout
@@ -36,5 +36,5 @@ filter_tag_version_only: &filter_tag_version_only
 workflows:
   heroku_deploy:
     jobs:
-      - deploy:
+      - job_deploy:
           <<: *filter_tag_version_only
