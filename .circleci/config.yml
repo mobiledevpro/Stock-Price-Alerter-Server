@@ -25,6 +25,7 @@ jobs:
       - heroku/deploy-via-git:
           force: true
           app-name: stock-price-alerter
+          tag: /^v.*/
 
 workflows:
   heroku_deploy:
