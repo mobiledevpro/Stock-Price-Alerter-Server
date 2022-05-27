@@ -25,9 +25,16 @@ jobs:
       - heroku/deploy-via-git:
           force: true
           app-name: stock-price-alerter
-          tag: /^v.*/
+
+filter_tag_version_only: &filter_tag_version_only
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
 
 workflows:
   heroku_deploy:
     jobs:
-      - deploy
+      - deploy:
+          <<: *filter_tag_version_only
