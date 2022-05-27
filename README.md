@@ -57,6 +57,16 @@ heroku git:remote -a stock-price-alerter
 git push heroku master
 ```
 
+## Circle CI setup
+
+* Go to [Circle CI](https://app.circleci.com/pipelines/) -> Set Up Project
+* Add HEROKU_API_KEY to [Project Settings](https://app.circleci.com/settings/project/) -> Environment Variables
+* To get a long-term Heroku API key call the following command:
+
+```shell
+heroku authorizations:create
+```
+
 ## Get in touch
 
 <a href="https://www.instagram.com/mobiledevpro/" target="_blank">
