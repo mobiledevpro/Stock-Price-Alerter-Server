@@ -1,0 +1,40 @@
+version: 2.1
+orbs:
+  heroku: circleci/heroku@1.2.6
+  orb-tools: circleci/orb-tools@10
+
+jobs:
+  job_deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: Check if Heroku is installed
+          command: |
+            if [[ $(command -v heroku) == "" ]]; then
+             echo "Heroku is not installed!"; exit 1;
+            else
+             echo Heroku successfully installed.
+            fi
+      - heroku/check-authentication
+      - run:
+          command: >
+            echo "The command above installs Heroku, the command below deploys.
+            What you do inbetween is up to you!"
+      - heroku/deploy-via-git:
+          force: true
+          app-name: stock-price-alerter
+
+filter_tag_version_only: &filter_tag_version_only
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
+
+workflows:
+  heroku_deploy:
+    jobs:
+      - job_deploy:
+          <<: *filter_tag_version_only
