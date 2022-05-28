@@ -1,4 +1,4 @@
-package com.mobiledevpro.models
+package com.mobiledevpro.feature.customer
 
 import kotlinx.serialization.Serializable
 

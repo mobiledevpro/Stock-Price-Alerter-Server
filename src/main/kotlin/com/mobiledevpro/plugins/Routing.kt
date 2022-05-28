@@ -1,7 +1,7 @@
 package com.mobiledevpro.plugins
 
+import com.mobiledevpro.feature.customer.customerRoute
 import com.mobiledevpro.models.Version
-import com.mobiledevpro.routes.customer.customerRoute
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

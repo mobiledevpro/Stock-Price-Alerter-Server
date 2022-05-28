@@ -1,8 +1,7 @@
-package com.mobiledevpro.routes.customer
+package com.mobiledevpro.feature.customer
 
 import com.mobiledevpro.models.ErrorBody
 import com.mobiledevpro.models.SuccessBody
-import com.mobiledevpro.models.customerStorage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
