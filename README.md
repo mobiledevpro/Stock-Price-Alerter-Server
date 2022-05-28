@@ -1,5 +1,15 @@
 # Stock-Price-Alerter-Server
 
+
+## Dev plan:
+- [ ] [Integrate database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
+- [ ] https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3
+- [ ] #2
+- [ ] Configurate CI to upload database to Heroku
+- [ ] Configurate CI to run tests once change is pushed to master
+- [ ] Connect to binance API and get all market coin pairs once a day
+
+
 ## Logic Scheme
 
 ![Logic Scheme](doc/logic_scheme.png)
