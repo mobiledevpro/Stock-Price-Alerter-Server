@@ -2,12 +2,15 @@
 
 
 ## Dev plan:
-- [ ] [Integrate database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
-- [ ] https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3
-- [ ] #2
-- [ ] Configurate CI to upload database to Heroku
-- [ ] Configurate CI to run tests once change is pushed to master
-- [ ] Connect to binance API and get all market coin pairs once a day
+- [ ] [Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
+- [ ] [Configurate CI to upload database to Heroku](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/5)
+- [ ] [Research how to get list of stocks from 3rd party services](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/4)
+- [ ] [Connect to Binance API](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/7)
+- [ ] [Get Binance market coin pairs and save into database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/8)
+- [ ] [Setup periodic task to update coin pairs in the server database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/9)
+- [ ] [Create endpoint to GET all coin pairs](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/10)
+- [ ] [Research how to run tests on Circle CI](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/2)
+- [ ] [Configurate CI to run tests once the change is pushed to master](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/6)
 
 
 ## Logic Scheme
