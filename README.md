@@ -2,7 +2,7 @@
 
 
 ## Dev plan:
-- [ ] [Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
+- [x] [Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
 - [ ] [Configurate CI to upload database to Heroku](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/5)
 - [ ] [Research how to get list of stocks from 3rd party services](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/4)
 - [ ] [Connect to Binance API](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/7)
@@ -83,6 +83,8 @@ heroku authorizations:create
 ## Postgres
 
 * Install locally on Ubuntu https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/
+* Configure Postgres on Heroku:
+  * sdf
 
 ## Get in touch
 
