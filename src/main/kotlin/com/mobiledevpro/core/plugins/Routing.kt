@@ -1,7 +1,7 @@
-package com.mobiledevpro.plugins
+package com.mobiledevpro.core.plugins
 
-import com.mobiledevpro.models.Version
-import com.mobiledevpro.routes.customer.customerRoute
+import com.mobiledevpro.core.models.Version
+import com.mobiledevpro.feature.customer.remote.route.customerRoute
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,19 +16,13 @@ fun Application.configureRouting(version: Version) {
     routing {
         when (version) {
             Version.V1 -> configV1()
-            Version.V2 -> configV2()
+            else -> throw RuntimeException("Wrong endpoint version $version")
         }
     }
 }
 
 private fun Routing.configV1() {
     route("/v1") {
-        customerRoute()
-    }
-}
-
-private fun Routing.configV2() {
-    route("/v2") {
         customerRoute()
     }
 }
