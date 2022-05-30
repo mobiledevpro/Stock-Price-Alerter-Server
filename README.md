@@ -84,7 +84,8 @@ heroku authorizations:create
 
 * Install locally on Ubuntu https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/
 * Configure Postgres on Heroku:
-  * sdf
+  * Install Add-on "Heroku Postgres" (Heroku app -> Resources)
+  * Create tables via PgAdmin.
 
 ## Get in touch
 
