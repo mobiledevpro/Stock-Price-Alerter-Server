@@ -80,6 +80,10 @@ git push heroku master
 heroku authorizations:create
 ```
 
+## Postgres
+
+* Install locally on Ubuntu https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/
+
 ## Get in touch
 
 <a href="https://www.instagram.com/mobiledevpro/" target="_blank">

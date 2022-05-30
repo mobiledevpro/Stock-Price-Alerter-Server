@@ -1,4 +1,4 @@
-package com.mobiledevpro.feature.customer
+package com.mobiledevpro.feature.customer.remote.route
 
 import io.ktor.server.routing.*
 

@@ -1,4 +1,4 @@
-package com.mobiledevpro.models
+package com.mobiledevpro.core.models
 
 enum class Version {
     V1,

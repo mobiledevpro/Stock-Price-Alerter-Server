@@ -1,9 +1,10 @@
 package com.mobiledevpro
 
-import com.mobiledevpro.models.Version
-import com.mobiledevpro.plugins.configureHTTP
-import com.mobiledevpro.plugins.configureRouting
-import com.mobiledevpro.plugins.configureSerialization
+import com.mobiledevpro.core.models.Version
+import com.mobiledevpro.core.plugins.configureHTTP
+import com.mobiledevpro.core.plugins.configureRouting
+import com.mobiledevpro.core.plugins.configureSerialization
+import com.mobiledevpro.database.DatabaseFactory
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 
@@ -16,5 +17,6 @@ fun Application.module() {
 }
 
 fun Application.moduleV1() {
+    DatabaseFactory.init()
     configureRouting(Version.V1)
 }
