@@ -86,6 +86,10 @@ heroku authorizations:create
 * Configure Postgres on Heroku:
   * Install Add-on "Heroku Postgres" (Heroku app -> Resources)
   * Create tables via PgAdmin.
+  * Add the following args to Config Vars:
+  ```
+  JDBC_URL = jdbc:postgresql://[database user name]:[database user password]@[database host]/[database name]
+  ```
 
 ## Get in touch
 
