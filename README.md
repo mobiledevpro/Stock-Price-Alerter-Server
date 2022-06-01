@@ -2,8 +2,7 @@
 
 
 ## Dev plan:
-- [ ] [Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
-- [ ] [Configurate CI to upload database to Heroku](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/5)
+- [x] [Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)
 - [ ] [Research how to get list of stocks from 3rd party services](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/4)
 - [ ] [Connect to Binance API](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/7)
 - [ ] [Get Binance market coin pairs and save into database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/8)
@@ -83,6 +82,14 @@ heroku authorizations:create
 ## Postgres
 
 * Install locally on Ubuntu https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/
+* Configure Postgres on Heroku:
+  * Add your own SSL certificate or upgrade to Heroku paid dyno to use Free SSL (Heroku App -> Settings)
+  * Install Add-on "Heroku Postgres" (Heroku app -> Resources)
+  * Create tables via PgAdmin.
+  * Add the following arg to Config Vars (Heroku App -> Settings):
+  ```
+  JDBC_URL = jdbc:postgresql://[database host]:[database port]/[database name]?user=[database user]&password=[database user password]&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory&sslmode=require
+  ```
 
 ## Get in touch
 

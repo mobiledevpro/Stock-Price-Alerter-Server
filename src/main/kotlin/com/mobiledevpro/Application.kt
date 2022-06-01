@@ -17,6 +17,6 @@ fun Application.module() {
 }
 
 fun Application.moduleV1() {
-    DatabaseFactory.init()
+    DatabaseFactory.init(environment.config)
     configureRouting(Version.V1)
 }

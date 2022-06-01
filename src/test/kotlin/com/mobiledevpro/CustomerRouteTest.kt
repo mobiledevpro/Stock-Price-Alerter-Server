@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class CustomerRouteTest {
     @Test
     fun testGetCustomers() = testApplication {
-        client.get("/customer").apply {
+        client.get("/v1/customer").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
     }
