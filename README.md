@@ -5,9 +5,9 @@
 - [x] ~~[Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)~~
 - [x] ~~[Research how to get list of stocks from 3rd party services](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/4)~~
 - [x] ~~[Connect to Binance API](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/7)~~
-- [ ] [Get Binance market coin pairs and save into database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/8)
+- [x] ~~[Get Binance market coin pairs and save into database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/8)~~
 - [x] ~~[Setup periodic task to update coin pairs in the server database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/9)~~
-- [ ] [Create endpoint to GET all available crypto coin pairs](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/10)
+- [ ] [Create endpoint to GET all available crypto coins with a search filter](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/10)
 - [ ] [Create endpoint to PUT crypto coin to watchlist](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/13)
 - [ ] [Create endpoint to PUT alert settings for selected crypto coin](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/14)
 - [ ] [Create endpoint to PUT Firebase device token to get push-notifications]

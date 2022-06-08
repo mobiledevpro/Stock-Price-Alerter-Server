@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
  * Table to store crypto coin exchange info
  */
 object CryptoCoinTable : Table("crypto_coin") {
-    val symbol = varchar("symbol", 10)
+    val symbol = varchar("symbol", 20)
     val baseAsset = varchar("base_asset", 10)
     val quoteAsset = varchar("quote_asset", 10)
     val pricePrecision = integer("price_precision")

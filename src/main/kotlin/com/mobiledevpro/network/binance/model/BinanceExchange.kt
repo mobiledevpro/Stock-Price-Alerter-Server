@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BinanceExchange(
-    val symbols: List<BinanceSymbol>
+    val symbols: List<BinanceExchangeSymbol>
 )
 
 @Serializable
-data class BinanceSymbol(
+data class BinanceExchangeSymbol(
     val symbol: String,
     val baseAsset: String,
     val quoteAsset: String,
