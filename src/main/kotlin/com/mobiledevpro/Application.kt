@@ -5,9 +5,9 @@ import com.mobiledevpro.core.plugins.configureHTTP
 import com.mobiledevpro.core.plugins.configureRouting
 import com.mobiledevpro.core.plugins.configureSerialization
 import com.mobiledevpro.database.DatabaseFactory
-import com.mobiledevpro.feature.binance.BinanceHTTPClientFactory
-import com.mobiledevpro.feature.binance.BinanceHTTPClientFactory.binanceHttpClient
-import com.mobiledevpro.feature.binance.BinanceHTTPClientFactory.getExchangeInfo
+import com.mobiledevpro.network.binance.BinanceHTTPClientFactory
+import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.binanceHttpClient
+import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.getExchangeInfo
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.launch
@@ -28,22 +28,8 @@ fun Application.moduleV1() {
     DatabaseFactory.init(environment.config)
     BinanceHTTPClientFactory.init(environment.config)
 
-    /*
-    while (true) {
-        launch {
-            delay(Duration.ofMinutes(1))
-
-            binanceHttpClient.use {
-                it.get("exchangeInfo")
-            }
-        }
-    }
-
-     */
-
     launch {
         while (true) {
-            delay(Duration.ofHours(1))
             println("-----------------")
             println("Get Exchange info")
             binanceHttpClient.getExchangeInfo().let {
@@ -54,6 +40,7 @@ fun Application.moduleV1() {
                         println("${entry.key} : ${entry.value}")
                 }
             }
+            delay(Duration.ofHours(1))
         }
     }
 }

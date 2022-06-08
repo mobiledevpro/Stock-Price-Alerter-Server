@@ -1,4 +1,4 @@
-package com.mobiledevpro.feature.binance
+package com.mobiledevpro.network.binance
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -42,7 +42,7 @@ object BinanceHTTPClientFactory {
                     path("fapi/v1/")
                 }
 
-                header("X-MBX-APIKEY", PUBLIC_KEY)
+                header("X-MBX-APIKEY", config.property("ktor.jwt.binancePublicKey").getString())
             }
         }
     }
@@ -50,7 +50,4 @@ object BinanceHTTPClientFactory {
     suspend fun HttpClient.getExchangeInfo(): HttpResponse =
         get("exchangeInfo")
 
-
-    private const val PUBLIC_KEY = "a8ca86b682a36b97f7fe679d074c7e4e85495ca2f58d3c7c2870ffec77f85a4b"
-    private const val SECRET_KEY = "251fc3fa22f1eb429bdeae059d624c29579cd973dd7122c3517d0a25077c7061"
 }
