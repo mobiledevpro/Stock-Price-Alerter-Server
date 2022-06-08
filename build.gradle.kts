@@ -40,10 +40,17 @@ dependencies {
     implementation("io.ktor:ktor-server-conditional-headers-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-auto-head-response:$ktorVersion")
 
+    // Database
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
+
+    //HTTP Client
+    implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm:$ktorVersion")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
