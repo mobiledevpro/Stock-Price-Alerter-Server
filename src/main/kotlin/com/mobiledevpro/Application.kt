@@ -8,6 +8,8 @@ import com.mobiledevpro.database.DatabaseFactory
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.binanceHttpClient
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.getExchangeInfo
+import com.mobiledevpro.network.binance.model.BinanceExchange
+import io.ktor.client.call.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.launch
@@ -39,6 +41,10 @@ fun Application.moduleV1() {
                     if (entry.key.contains("X-MBX-USED-WEIGHT"))
                         println("${entry.key} : ${entry.value}")
                 }
+
+                val body: BinanceExchange = it.body()
+
+                println("RESULT BODY: symbols ${body.symbols.size}")
             }
             delay(Duration.ofHours(1))
         }
