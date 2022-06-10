@@ -42,6 +42,8 @@ object BinanceHTTPClientFactory {
                     !response.status.isSuccess()
                 }
 
+                retryOnExceptionOrServerErrors(maxRetries)
+
                 //Wait before the next try
                 delayMillis { retry ->
                     retry * 30000L

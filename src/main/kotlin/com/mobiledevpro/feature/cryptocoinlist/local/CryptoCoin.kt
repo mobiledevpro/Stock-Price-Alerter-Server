@@ -1,4 +1,4 @@
-package com.mobiledevpro.feature.cryptocoin.local
+package com.mobiledevpro.feature.cryptocoinlist.local
 
 data class CryptoCoin(
     val symbol: String,

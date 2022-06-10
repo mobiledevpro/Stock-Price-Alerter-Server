@@ -2,14 +2,14 @@ package com.mobiledevpro.database.dao
 
 import com.mobiledevpro.database.DatabaseFactory.dbQuery
 import com.mobiledevpro.database.model.CryptoCoinTable
-import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
+import com.mobiledevpro.feature.cryptocoinlist.local.CryptoCoin
 
 class ImplCryptoCoinDAO : CryptoCoinDAO {
     override suspend fun selectAll(): List<CryptoCoin> = dbQuery {
         CryptoCoinTable.select()
     }
 
-    override suspend fun select(searchSymbol: String): List<CryptoCoin> = dbQuery {
+    override suspend fun selectBy(searchSymbol: String): List<CryptoCoin> = dbQuery {
         CryptoCoinTable.select(searchSymbol)
     }
 
