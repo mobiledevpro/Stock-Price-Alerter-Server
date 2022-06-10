@@ -1,7 +1,11 @@
-# Stock-Price-Alerter-Server
+# Stock Price Alerter | Ktor Server
 
+[![CircleCI](https://circleci.com/gh/mobiledevpro/Stock-Price-Alerter-Server/tree/master.svg?style=svg)](https://circleci.com/gh/mobiledevpro/Stock-Price-Alerter-Server/tree/master)
+
+[![InsightsSnapshot](https://dl.circleci.com/insights-snapshot/gh/mobiledevpro/Stock-Price-Alerter-Server/master/heroku_deploy/badge.svg)](https://app.circleci.com/insights/github/mobiledevpro/Stock-Price-Alerter-Server/workflows/heroku_deploy?branch=master)
 
 ## Dev plan:
+
 - [x] ~~[Setup Postgres database](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/3)~~
 - [x] ~~[Research how to get list of stocks from 3rd party services](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/4)~~
 - [x] ~~[Connect to Binance API](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/7)~~
