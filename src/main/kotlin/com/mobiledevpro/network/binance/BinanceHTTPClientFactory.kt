@@ -27,7 +27,7 @@ object BinanceHTTPClientFactory {
 
             install(Logging) {
                 logger = Logger.DEFAULT
-                level = LogLevel.ALL
+                level = LogLevel.INFO
             }
 
             install(HttpTimeout) {
@@ -37,12 +37,14 @@ object BinanceHTTPClientFactory {
 
             }
             install(HttpRequestRetry) {
-                maxRetries = 5
+                maxRetries = 100
                 retryIf { _, response ->
                     !response.status.isSuccess()
                 }
+
+                //Wait before the next try
                 delayMillis { retry ->
-                    retry * 3000L
+                    retry * 30000L
                 }
             }
 
