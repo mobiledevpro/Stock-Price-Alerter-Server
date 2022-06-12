@@ -6,7 +6,7 @@ import com.mobiledevpro.core.plugins.configureRouting
 import com.mobiledevpro.core.plugins.configureSerialization
 import com.mobiledevpro.database.DatabaseFactory
 import com.mobiledevpro.database.dao.cryptoCoinDAO
-import com.mobiledevpro.feature.cryptocoinlist.toCryptoCoin
+import com.mobiledevpro.feature.cryptocoin.toCryptoCoin
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.binanceHttpClient
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.getExchangeInfo

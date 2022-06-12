@@ -1,7 +1,7 @@
 package com.mobiledevpro.database.model
 
-import com.mobiledevpro.feature.cryptocoinlist.local.CryptoCoin
-import com.mobiledevpro.feature.cryptocoinlist.toCryptoCoin
+import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
+import com.mobiledevpro.feature.cryptocoin.toCryptoCoin
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 

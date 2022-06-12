@@ -1,4 +1,4 @@
-package com.mobiledevpro.feature.cryptocoinlist.remote.model
+package com.mobiledevpro.feature.cryptocoin.remote.model
 
 import kotlinx.serialization.Serializable
 

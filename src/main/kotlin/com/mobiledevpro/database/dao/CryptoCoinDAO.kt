@@ -1,6 +1,6 @@
 package com.mobiledevpro.database.dao
 
-import com.mobiledevpro.feature.cryptocoinlist.local.CryptoCoin
+import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
 
 interface CryptoCoinDAO {
     suspend fun selectAll(): List<CryptoCoin>

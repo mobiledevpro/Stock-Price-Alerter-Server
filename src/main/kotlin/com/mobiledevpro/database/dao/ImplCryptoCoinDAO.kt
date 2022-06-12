@@ -2,7 +2,7 @@ package com.mobiledevpro.database.dao
 
 import com.mobiledevpro.database.DatabaseFactory.dbQuery
 import com.mobiledevpro.database.model.CryptoCoinTable
-import com.mobiledevpro.feature.cryptocoinlist.local.CryptoCoin
+import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
 
 class ImplCryptoCoinDAO : CryptoCoinDAO {
     override suspend fun selectAll(): List<CryptoCoin> = dbQuery {
