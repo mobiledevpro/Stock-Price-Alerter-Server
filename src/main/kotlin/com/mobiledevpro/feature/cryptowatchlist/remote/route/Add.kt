@@ -1,26 +1,36 @@
 package com.mobiledevpro.feature.cryptowatchlist.remote.route
 
+import com.mobiledevpro.core.models.ErrorBody
 import com.mobiledevpro.core.models.SuccessBody
-import com.mobiledevpro.feature.cryptocoin.remote.model.CryptoCoinRemote
+import com.mobiledevpro.database.dao.cryptoCoinDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.cryptoWatchlistAdd(path: String) {
-    route(path) {
+    route("$path/{symbol?}") {
         put {
-            val coin = call.receive<CryptoCoinRemote>()
+            val coin: String = call.parameters["symbol"]
+                ?: return@put call.respond(HttpStatusCode.BadRequest)
 
-            println("Add coin ${coin.symbol}")
+            val searchCoinList = cryptoCoinDAO.selectBy(coin)
+
+            //Check this coin exist in the coins list
+
+            if (searchCoinList.isEmpty())
+                return@put ErrorBody(HttpStatusCode.NotFound.value, "Coin Not Found")
+                    .let { body ->
+                        call.respond(HttpStatusCode.NotFound, body)
+                    }
+
+            if (searchCoinList.size > 1)
+                return@put ErrorBody(HttpStatusCode.BadRequest.value, "Wrong coin symbol. There is more than 1 found")
+                    .let { body ->
+                        call.respond(HttpStatusCode.BadRequest, body)
+                    }
 
             //TODO: add to watchlist
-/*
-            customerDAO
-                .add(customer.toLocal())
-
- */
 
             SuccessBody("Coin added to watchlist")
                 .also { body ->
