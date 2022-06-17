@@ -21,7 +21,7 @@ internal fun Route.cryptoCoinListGetBySearch(path: String) {
 
             val coinList =
                 cryptoCoinDAO
-                    .selectBy(symbol)
+                    .searchBy(symbol)
                     .map(CryptoCoin::toRemote)
 
             if (coinList.isEmpty())

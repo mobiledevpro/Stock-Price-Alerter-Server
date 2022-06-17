@@ -9,8 +9,12 @@ class ImplCryptoCoinDAO : CryptoCoinDAO {
         CryptoCoinTable.select()
     }
 
-    override suspend fun selectBy(searchSymbol: String): List<CryptoCoin> = dbQuery {
-        CryptoCoinTable.select(searchSymbol)
+    override suspend fun searchBy(searchSymbol: String): List<CryptoCoin> = dbQuery {
+        CryptoCoinTable.selectWhereLike(searchSymbol)
+    }
+
+    override suspend fun selectBy(symbol: String): List<CryptoCoin> = dbQuery {
+        CryptoCoinTable.selectWhere(symbol)
     }
 
     override suspend fun add(list: List<CryptoCoin>): Boolean = dbQuery {

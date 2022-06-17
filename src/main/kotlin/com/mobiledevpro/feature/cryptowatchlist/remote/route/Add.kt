@@ -1,40 +1,49 @@
 package com.mobiledevpro.feature.cryptowatchlist.remote.route
 
-import com.mobiledevpro.core.models.ErrorBody
-import com.mobiledevpro.core.models.SuccessBody
+import com.mobiledevpro.core.extension.errorRespond
+import com.mobiledevpro.core.extension.successRespond
 import com.mobiledevpro.database.dao.cryptoCoinDAO
+import com.mobiledevpro.database.dao.cryptoWatchlistDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.cryptoWatchlistAdd(path: String) {
-    route("$path/{symbol?}") {
+    route("$path/{user_id?}/{symbol?}") {
         put {
-            val coin: String = call.parameters["symbol"]
+
+            val userId: String = call.parameters["user_id"]
                 ?: return@put call.respond(HttpStatusCode.BadRequest)
 
-            val searchCoinList = cryptoCoinDAO.selectBy(coin)
+            val symbol: String = call.parameters["symbol"]
+                ?: return@put call.respond(HttpStatusCode.BadRequest)
 
-            //Check this coin exist in the coins list
-
+            //Check this ticker is available for trading
+            val searchCoinList = cryptoCoinDAO.selectBy(symbol)
             if (searchCoinList.isEmpty())
-                return@put ErrorBody(HttpStatusCode.NotFound.value, "Coin Not Found")
-                    .let { body ->
-                        call.respond(HttpStatusCode.NotFound, body)
-                    }
+                return@put errorRespond(HttpStatusCode.NotFound, "Ticker $symbol is not found")
 
             if (searchCoinList.size > 1)
-                return@put ErrorBody(HttpStatusCode.BadRequest.value, "Wrong coin symbol. There is more than 1 found")
-                    .let { body ->
-                        call.respond(HttpStatusCode.BadRequest, body)
-                    }
+                return@put errorRespond(HttpStatusCode.BadRequest, "Wrong ticker symbol. There is more than 1 found")
 
-            //TODO: add to watchlist
+            //Check this ticker was not added before
+            cryptoWatchlistDAO.isExist(userId, symbol)
+                .let { isAlreadyAdded ->
+                    if (isAlreadyAdded)
+                        return@put errorRespond(HttpStatusCode.Conflict, "Ticker $symbol is already added")
+                }
 
-            SuccessBody("Coin added to watchlist")
-                .also { body ->
-                    call.respond(HttpStatusCode.Created, body)
+            //Add ticker to watchlist table
+            cryptoWatchlistDAO.add(userId, symbol)
+                .let { isAdded ->
+                    if (!isAdded)
+                        return@put errorRespond(
+                            HttpStatusCode.BadRequest,
+                            "Ticker $symbol is not added. Something went wrong"
+                        )
+                    else
+                        return@put successRespond(HttpStatusCode.Created, "Coin added to watchlist")
                 }
         }
     }
