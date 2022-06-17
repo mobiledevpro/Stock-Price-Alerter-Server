@@ -10,6 +10,9 @@ import com.mobiledevpro.feature.cryptocoin.toCryptoCoin
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.binanceHttpClient
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.getExchangeInfo
+import com.mobiledevpro.network.binance.BinanceSocketClientFactory
+import com.mobiledevpro.network.binance.BinanceSocketClientFactory.binanceSocketClient
+import com.mobiledevpro.network.binance.BinanceSocketClientFactory.subscribe
 import com.mobiledevpro.network.binance.model.BinanceExchange
 import com.mobiledevpro.network.binance.model.BinanceExchangeSymbol
 import io.ktor.client.call.*
@@ -85,5 +88,13 @@ fun Application.binanceExchangeInfoModule() {
             println("Next update in 1 hour")
             delay(Duration.ofHours(1))
         }
+    }
+}
+
+fun Application.binanceSocketModule() {
+    BinanceSocketClientFactory.init(environment.config)
+
+    launch(Dispatchers.IO) {
+        binanceSocketClient.subscribe()
     }
 }

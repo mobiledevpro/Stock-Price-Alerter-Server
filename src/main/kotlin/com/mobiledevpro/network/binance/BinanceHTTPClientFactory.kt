@@ -1,7 +1,7 @@
 package com.mobiledevpro.network.binance
 
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
+import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
@@ -16,7 +16,7 @@ object BinanceHTTPClientFactory {
     lateinit var binanceHttpClient: HttpClient
 
     fun init(config: ApplicationConfig) {
-        binanceHttpClient = HttpClient(CIO) {
+        binanceHttpClient = HttpClient(OkHttp) {
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true
