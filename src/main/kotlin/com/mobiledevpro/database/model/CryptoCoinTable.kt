@@ -1,7 +1,7 @@
 package com.mobiledevpro.database.model
 
-import com.mobiledevpro.feature.cryptocoinlist.local.CryptoCoin
-import com.mobiledevpro.feature.cryptocoinlist.toCryptoCoin
+import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
+import com.mobiledevpro.feature.cryptocoin.toCryptoCoin
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
@@ -35,10 +35,19 @@ object CryptoCoinTable : Table("crypto_coin") {
             emptyList<CryptoCoin>()
         }
 
-    fun select(searchSymbol: String): List<CryptoCoin> =
+    fun selectWhereLike(searchSymbol: String): List<CryptoCoin> =
         try {
             CryptoCoinTable
                 .select { symbol.lowerCase() like "%${searchSymbol.lowercase()}%" }
+                .map(ResultRow::toCryptoCoin)
+        } catch (e: Exception) {
+            emptyList<CryptoCoin>()
+        }
+
+    fun selectWhere(symbol: String): List<CryptoCoin> =
+        try {
+            CryptoCoinTable
+                .select { CryptoCoinTable.symbol.lowerCase() eq symbol.lowercase() }
                 .map(ResultRow::toCryptoCoin)
         } catch (e: Exception) {
             emptyList<CryptoCoin>()

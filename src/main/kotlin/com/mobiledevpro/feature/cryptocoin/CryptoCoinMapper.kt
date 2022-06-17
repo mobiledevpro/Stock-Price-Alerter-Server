@@ -1,8 +1,8 @@
-package com.mobiledevpro.feature.cryptocoinlist
+package com.mobiledevpro.feature.cryptocoin
 
 import com.mobiledevpro.database.model.CryptoCoinTable
-import com.mobiledevpro.feature.cryptocoinlist.local.CryptoCoin
-import com.mobiledevpro.feature.cryptocoinlist.remote.model.CryptoCoinRemote
+import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
+import com.mobiledevpro.feature.cryptocoin.remote.model.CryptoCoinRemote
 import com.mobiledevpro.network.binance.model.BinanceExchangeSymbol
 import org.jetbrains.exposed.sql.ResultRow
 
