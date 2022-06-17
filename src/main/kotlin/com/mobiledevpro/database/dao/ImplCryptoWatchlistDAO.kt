@@ -5,6 +5,11 @@ import com.mobiledevpro.database.model.CryptoWatchlistTable
 import com.mobiledevpro.feature.cryptowatchlist.local.CryptoWatchlistTicker
 
 class ImplCryptoWatchlistDAO : CryptoWatchlistDAO {
+
+    override suspend fun select(userUid: String): List<CryptoWatchlistTicker> = dbQuery {
+        CryptoWatchlistTable.selectBy(userUid)
+    }
+
     override suspend fun add(userUid: String, symbol: String): Boolean = dbQuery {
         CryptoWatchlistTicker(
             userUid,
