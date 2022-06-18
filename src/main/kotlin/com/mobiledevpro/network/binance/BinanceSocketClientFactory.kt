@@ -40,14 +40,20 @@ object BinanceSocketClientFactory {
                 .let {
                     send(it)
                 }
+
             while (true) {
-                val othersMessage = incoming.receive() as? Frame.Text
-                println(othersMessage?.readText())
-                /*  val myMessage = Scanner(System.`in`).next()
-                  if(myMessage != null) {
-                      send(myMessage)
-                  }*/
+                try {
+                    val othersMessage = incoming.receive() as? Frame.Text
+                    println(othersMessage?.readText())
+                    /*  val myMessage = Scanner(System.`in`).next()
+                              if(myMessage != null) {
+                                  send(myMessage)
+                              }*/
+                } catch (e: Exception) {
+                    println("WebSocket exception: ${e.localizedMessage}")
+                }
             }
+
         }
     }
 
