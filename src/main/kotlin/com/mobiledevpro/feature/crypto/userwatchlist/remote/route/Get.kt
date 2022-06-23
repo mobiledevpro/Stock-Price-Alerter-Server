@@ -1,7 +1,7 @@
 package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 
 import com.mobiledevpro.core.extension.errorRespond
-import com.mobiledevpro.database.dao.cryptoWatchlistDAO
+import com.mobiledevpro.database.dao.cryptoUserWatchlistDAO
 import com.mobiledevpro.feature.crypto.userwatchlist.local.model.CryptoUserWatchlistTicker
 import com.mobiledevpro.feature.crypto.userwatchlist.toRemote
 import io.ktor.http.*
@@ -16,7 +16,7 @@ fun Route.cryptoUserWatchlistGet(path: String) {
             val userId: String = call.parameters["user_id"]
                 ?: return@get errorRespond(HttpStatusCode.BadRequest, "No User ID")
 
-            val watchlist = cryptoWatchlistDAO.select(userId)
+            val watchlist = cryptoUserWatchlistDAO.select(userId)
                 .map(CryptoUserWatchlistTicker::toRemote)
 
             if (watchlist.isNotEmpty())

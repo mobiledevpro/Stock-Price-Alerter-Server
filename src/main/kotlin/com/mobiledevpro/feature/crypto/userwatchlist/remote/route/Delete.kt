@@ -2,7 +2,7 @@ package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 
 import com.mobiledevpro.core.extension.errorRespond
 import com.mobiledevpro.core.extension.successRespond
-import com.mobiledevpro.database.dao.cryptoWatchlistDAO
+import com.mobiledevpro.database.dao.cryptoUserWatchlistDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -19,10 +19,10 @@ fun Route.cryptoUserWatchlistDelete(path: String) {
                 ?: return@delete call.respond(HttpStatusCode.BadRequest)
 
             //Check this ticker was not added before
-            cryptoWatchlistDAO.isExist(userId, symbol)
+            cryptoUserWatchlistDAO.isExist(userId, symbol)
                 .let { isExist ->
                     if (isExist)
-                        cryptoWatchlistDAO.delete(userId, symbol)
+                        cryptoUserWatchlistDAO.delete(userId, symbol)
                             .let { isDeleted ->
                                 if (isDeleted)
                                     return@delete successRespond(

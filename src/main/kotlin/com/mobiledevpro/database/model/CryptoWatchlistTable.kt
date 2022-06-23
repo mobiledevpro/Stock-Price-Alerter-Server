@@ -1,10 +1,9 @@
 package com.mobiledevpro.database.model
 
 import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTicker
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
+import com.mobiledevpro.feature.crypto.watchlist.toCryptoWatchlistTicker
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.update
 
 /**
  * Common watchlist to subscribe on Binance Socket and get price changes
@@ -18,8 +17,17 @@ object CryptoWatchlistTable : Table("crypto_watchlist") {
 
     override val primaryKey = PrimaryKey(symbol)
 
+    fun select(): List<CryptoWatchlistTicker> =
+        try {
+            this.selectAll()
+                .map(ResultRow::toCryptoWatchlistTicker)
+
+        } catch (e: Exception) {
+            emptyList<CryptoWatchlistTicker>()
+        }
+
     fun insert(ticker: CryptoWatchlistTicker): InsertStatement<Number> =
-        CryptoWatchlistTable.insert { t ->
+        this.insert { t ->
             t[symbol] = ticker.symbol
             t[lastPrice] = ticker.lastPrice
             t[priceChange] = ticker.priceChange
@@ -28,7 +36,7 @@ object CryptoWatchlistTable : Table("crypto_watchlist") {
         }
 
     fun update(ticker: CryptoWatchlistTicker): Int =
-        CryptoWatchlistTable.update(
+        this.update(
             { (symbol eq ticker.symbol) }
         ) { t ->
             t[lastPrice] = ticker.lastPrice
@@ -36,22 +44,17 @@ object CryptoWatchlistTable : Table("crypto_watchlist") {
             t[priceChangePercent] = ticker.priceChangePercent
             t[updateTime] = ticker.updateTime
         }
-    /*
-    fun isExist(ticker: CryptoUserWatchlistTicker): Boolean =
+
+    fun isExist(ticker: CryptoWatchlistTicker): Boolean =
         try {
-            CryptoWatchlistTable
-                .select { (CryptoWatchlistTable.userId eq ticker.userUid) and (CryptoWatchlistTable.symbol eq ticker.symbol) }
-                .map(ResultRow::toCryptoUserWatchlistTicker)
+            this.select { symbol eq ticker.symbol }
+                .map(ResultRow::toCryptoWatchlistTicker)
                 .isNotEmpty()
 
         } catch (e: Exception) {
             false
         }
 
-    fun deleteBy(ticker: CryptoUserWatchlistTicker): Int =
-        CryptoWatchlistTable.deleteWhere {
-            (CryptoWatchlistTable.userId eq ticker.userUid) and (CryptoWatchlistTable.symbol eq ticker.symbol)
-        }
-
-     */
+    fun deleteBy(ticker: CryptoWatchlistTicker): Int =
+        this.deleteWhere { symbol eq ticker.symbol }
 }

@@ -3,6 +3,7 @@ package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 import com.mobiledevpro.core.extension.errorRespond
 import com.mobiledevpro.core.extension.successRespond
 import com.mobiledevpro.database.dao.cryptoExchangeDAO
+import com.mobiledevpro.database.dao.cryptoUserWatchlistDAO
 import com.mobiledevpro.database.dao.cryptoWatchlistDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -27,15 +28,21 @@ fun Route.cryptoUserWatchlistAdd(path: String) {
             if (searchCoinList.size > 1)
                 return@put errorRespond(HttpStatusCode.BadRequest, "Wrong ticker symbol. There is more than 1 found")
 
-            //Check this ticker was not added before
-            cryptoWatchlistDAO.isExist(userId, symbol)
+            //Check this ticker was not added for this user before
+            cryptoUserWatchlistDAO.isExist(userId, symbol)
                 .let { isAlreadyAdded ->
                     if (isAlreadyAdded)
                         return@put errorRespond(HttpStatusCode.Conflict, "Ticker $symbol is already added")
                 }
 
-            //Add ticker to watchlist table
-            cryptoWatchlistDAO.add(userId, symbol)
+            //Add ticker to common watchlist
+            cryptoWatchlistDAO.also { dao ->
+                if (!dao.isExist(symbol))
+                    dao.add(symbol)
+            }
+
+            //Add ticker to user's watchlist table
+            cryptoUserWatchlistDAO.add(userId, symbol)
                 .let { isAdded ->
                     if (!isAdded)
                         return@put errorRespond(

@@ -1,40 +1,37 @@
 package com.mobiledevpro.database.dao
 
 import com.mobiledevpro.database.DatabaseFactory.dbQuery
-import com.mobiledevpro.database.model.CryptoUserWatchlistTable
-import com.mobiledevpro.feature.crypto.userwatchlist.local.model.CryptoUserWatchlistTicker
+import com.mobiledevpro.database.model.CryptoWatchlistTable
+import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTicker
 
 class ImplCryptoWatchlistDAO : CryptoWatchlistDAO {
 
-    override suspend fun select(userUid: String): List<CryptoUserWatchlistTicker> = dbQuery {
-        CryptoUserWatchlistTable.selectBy(userUid)
+    override suspend fun select(): List<CryptoWatchlistTicker> = dbQuery {
+        CryptoWatchlistTable.select()
     }
 
-    override suspend fun add(userUid: String, symbol: String): Boolean = dbQuery {
-        CryptoUserWatchlistTicker(
-            userUid,
+    override suspend fun add(symbol: String): Boolean = dbQuery {
+        CryptoWatchlistTicker(
             symbol
-        ).let(CryptoUserWatchlistTable::insert)
+        ).let(CryptoWatchlistTable::insert)
 
         true
     }
 
-    override suspend fun delete(userUid: String, symbol: String): Boolean = dbQuery {
-        CryptoUserWatchlistTicker(
-            userUid,
+    override suspend fun delete(symbol: String): Boolean = dbQuery {
+        CryptoWatchlistTicker(
             symbol
         )
-            .let(CryptoUserWatchlistTable::deleteBy)
+            .let(CryptoWatchlistTable::deleteBy)
             .let {
                 it > 0
             }
     }
 
-    override suspend fun isExist(userUid: String, symbol: String): Boolean = dbQuery {
-        CryptoUserWatchlistTicker(
-            userUid,
+    override suspend fun isExist(symbol: String): Boolean = dbQuery {
+        CryptoWatchlistTicker(
             symbol
-        ).let(CryptoUserWatchlistTable::isExist)
+        ).let(CryptoWatchlistTable::isExist)
     }
 }
 
