@@ -1,7 +1,7 @@
 package com.mobiledevpro.database
 
-import com.mobiledevpro.database.model.CryptoCoinTable
-import com.mobiledevpro.database.model.CryptoWatchlistTable
+import com.mobiledevpro.database.model.CryptoExchangeTable
+import com.mobiledevpro.database.model.CryptoUserWatchlistTable
 import com.mobiledevpro.database.model.CustomerTable
 import io.ktor.server.config.*
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +21,8 @@ object DatabaseFactory {
 
         transaction(database) {
             SchemaUtils.create(CustomerTable)
-            SchemaUtils.create(CryptoCoinTable)
-            SchemaUtils.create(CryptoWatchlistTable)
+            SchemaUtils.create(CryptoExchangeTable)
+            SchemaUtils.create(CryptoUserWatchlistTable)
         }
     }
 

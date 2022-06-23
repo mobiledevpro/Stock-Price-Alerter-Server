@@ -5,8 +5,8 @@ import com.mobiledevpro.core.plugins.configureHTTP
 import com.mobiledevpro.core.plugins.configureRouting
 import com.mobiledevpro.core.plugins.configureSerialization
 import com.mobiledevpro.database.DatabaseFactory
-import com.mobiledevpro.database.dao.cryptoCoinDAO
-import com.mobiledevpro.feature.cryptocoin.toCryptoCoin
+import com.mobiledevpro.database.dao.cryptoExchangeDAO
+import com.mobiledevpro.feature.crypto.exchange.toCryptoExchange
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.binanceHttpClient
 import com.mobiledevpro.network.binance.BinanceHTTPClientFactory.getExchangeInfo
@@ -69,9 +69,9 @@ fun Application.binanceExchangeInfoModule() {
                 val cacheExchangeInfoDeferred = async(Dispatchers.IO) {
                     //Save to database
                     binanceExchangeInfo.symbols
-                        .map(BinanceExchangeSymbol::toCryptoCoin)
+                        .map(BinanceExchangeSymbol::toCryptoExchange)
                         .let { coinList ->
-                            cryptoCoinDAO.add(coinList)
+                            cryptoExchangeDAO.add(coinList)
                         }
 
                     true

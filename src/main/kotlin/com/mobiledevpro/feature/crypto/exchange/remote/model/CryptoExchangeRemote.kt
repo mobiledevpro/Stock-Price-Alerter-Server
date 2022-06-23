@@ -1,9 +1,9 @@
-package com.mobiledevpro.feature.cryptocoin.remote.model
+package com.mobiledevpro.feature.crypto.exchange.remote.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CryptoCoinRemote(
+data class CryptoExchangeRemote(
     val symbol: String,
     val baseAsset: String,
     val quoteAsset: String

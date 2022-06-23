@@ -1,4 +1,4 @@
-package com.mobiledevpro.feature.cryptowatchlist.remote.route
+package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 
 import com.mobiledevpro.core.extension.errorRespond
 import com.mobiledevpro.core.extension.successRespond
@@ -8,7 +8,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.cryptoWatchlistDelete(path: String) {
+fun Route.cryptoUserWatchlistDelete(path: String) {
     route("$path/{user_id?}/{symbol?}") {
         delete {
 

@@ -1,6 +1,6 @@
-package com.mobiledevpro.feature.cryptocoin.local
+package com.mobiledevpro.feature.crypto.exchange.local
 
-data class CryptoCoin(
+data class CryptoExchange(
     val symbol: String,
     val baseAsset: String,
     val quoteAsset: String,

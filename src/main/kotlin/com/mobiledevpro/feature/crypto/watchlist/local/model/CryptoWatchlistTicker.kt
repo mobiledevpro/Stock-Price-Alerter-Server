@@ -1,7 +1,6 @@
-package com.mobiledevpro.feature.cryptowatchlist.local
+package com.mobiledevpro.feature.crypto.watchlist.local.model
 
 data class CryptoWatchlistTicker(
-    val userUid: String,
     val symbol: String,
     val lastPrice: Double = 0.0,
     val priceChange: Double = 0.0,

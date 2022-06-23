@@ -1,15 +1,15 @@
-package com.mobiledevpro.feature.cryptocoin.remote.route
+package com.mobiledevpro.feature.crypto.exchange.remote.route
 
 import com.mobiledevpro.core.models.ErrorBody
-import com.mobiledevpro.database.dao.cryptoCoinDAO
-import com.mobiledevpro.feature.cryptocoin.local.CryptoCoin
-import com.mobiledevpro.feature.cryptocoin.toRemote
+import com.mobiledevpro.database.dao.cryptoExchangeDAO
+import com.mobiledevpro.feature.crypto.exchange.local.CryptoExchange
+import com.mobiledevpro.feature.crypto.exchange.toRemote
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-internal fun Route.cryptoCoinListGetBySearch(path: String) {
+internal fun Route.cryptoExchangeListGetBySearch(path: String) {
     route(path) {
         get("{search?}") {
 
@@ -20,9 +20,9 @@ internal fun Route.cryptoCoinListGetBySearch(path: String) {
                     }
 
             val coinList =
-                cryptoCoinDAO
+                cryptoExchangeDAO
                     .searchBy(symbol)
-                    .map(CryptoCoin::toRemote)
+                    .map(CryptoExchange::toRemote)
 
             if (coinList.isEmpty())
                 return@get ErrorBody(HttpStatusCode.NotFound.value, "Nothing found for $symbol").let { body ->

@@ -1,15 +1,15 @@
-package com.mobiledevpro.feature.cryptowatchlist.remote.route
+package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 
 import com.mobiledevpro.core.extension.errorRespond
 import com.mobiledevpro.core.extension.successRespond
-import com.mobiledevpro.database.dao.cryptoCoinDAO
+import com.mobiledevpro.database.dao.cryptoExchangeDAO
 import com.mobiledevpro.database.dao.cryptoWatchlistDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.cryptoWatchlistAdd(path: String) {
+fun Route.cryptoUserWatchlistAdd(path: String) {
     route("$path/{user_id?}/{symbol?}") {
         put {
 
@@ -20,7 +20,7 @@ fun Route.cryptoWatchlistAdd(path: String) {
                 ?: return@put call.respond(HttpStatusCode.BadRequest)
 
             //Check this ticker is available for trading
-            val searchCoinList = cryptoCoinDAO.selectBy(symbol)
+            val searchCoinList = cryptoExchangeDAO.selectBy(symbol)
             if (searchCoinList.isEmpty())
                 return@put errorRespond(HttpStatusCode.NotFound, "Ticker $symbol is not found")
 
@@ -43,7 +43,7 @@ fun Route.cryptoWatchlistAdd(path: String) {
                             "Ticker $symbol is not added. Something went wrong"
                         )
                     else
-                        return@put successRespond(HttpStatusCode.Created, "Coin added to watchlist")
+                        return@put successRespond(HttpStatusCode.Created, "Ticker added to watchlist")
                 }
         }
     }
