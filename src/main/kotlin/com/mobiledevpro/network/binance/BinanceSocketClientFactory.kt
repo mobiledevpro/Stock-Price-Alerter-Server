@@ -47,14 +47,14 @@ object BinanceSocketClientFactory {
                         emit(it)
                     }
                 } catch (e: Exception) {
-                    println("WebSocket exception: ${e.localizedMessage}")
+                    println("WebSocket exception [subscribe]: ${e.localizedMessage}")
                 }
             }
 
         }
     }.cancellable()
 
-    suspend fun HttpClient.unsubscribe(request: BinanceSocket.Request) {
+    suspend fun HttpClient.unsubscribe(request: BinanceSocket.Request) = flow<Frame.Text> {
         wss(host = HOST, path = "/ws") {
             println("Send ${request.method}")
 
@@ -63,8 +63,20 @@ object BinanceSocketClientFactory {
                 .let {
                     send(it)
                 }
+
+            while (true) {
+                if (!isActive) break
+                try {
+                    val othersMessage = incoming.receive() as? Frame.Text
+                    othersMessage?.let {
+                        emit(it)
+                    }
+                } catch (e: Exception) {
+                    println("WebSocket exception [unsubscribe]: ${e.localizedMessage}")
+                }
+            }
         }
-    }
+    }.cancellable()
 
     private const val HOST = "stream.binancefuture.com"
 }

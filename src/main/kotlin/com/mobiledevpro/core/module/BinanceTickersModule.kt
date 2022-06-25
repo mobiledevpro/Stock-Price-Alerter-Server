@@ -5,11 +5,15 @@ import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTick
 import com.mobiledevpro.feature.crypto.watchlist.repository.cryptoWatchlistRepository
 import com.mobiledevpro.network.binance.BinanceSocketClientFactory
 import com.mobiledevpro.network.binance.BinanceSocketClientFactory.subscribe
+import com.mobiledevpro.network.binance.BinanceSocketClientFactory.unsubscribe
 import com.mobiledevpro.network.binance.model.BinanceSocket
 import io.ktor.server.application.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import java.time.Duration
 
@@ -44,8 +48,6 @@ fun Application.binanceTickersModule() {
                     println("Call request ${request.method}")
                     BinanceSocketClientFactory.binanceSocketClient.subscribe(request)
                         .collect { textFrame: Frame.Text? ->
-                            if (isActive)
-                                println("Subscribe flow is active $isActive")
                             // coroutineContext.ensureActive()
                             println(textFrame?.readText())
                             //TODO: cache to table
@@ -55,23 +57,44 @@ fun Application.binanceTickersModule() {
         }
     }
 
+    //Job to unsubscribe from tickers
+    val jobUnsubscribeTickers: (List<CryptoWatchlistTicker>) -> Job = { tickerList ->
+        launch(Dispatchers.IO, CoroutineStart.LAZY) {
+            cryptoWatchlistRepository.createTickerRequestRemote(BinanceSocket.Method.UNSUBSCRIBE, tickerList)
+                .also { request ->
+                    println("Call request ${request.method}")
+                    BinanceSocketClientFactory.binanceSocketClient.unsubscribe(request)
+                        .collect { textFrame: Frame.Text? ->
+                            println(textFrame?.readText())
+                        }
+                }
+        }
+    }
+
     launch(Dispatchers.IO) {
 
-        var jobSubscription: Job? = null
+        var jobSubscribe: Job? = null
+        var jobUnsubscribe: Job? = null
         var currentTickerList: List<CryptoWatchlistTicker> = emptyList()
 
         cachedWatchlistFlow.collect { newTickerList: List<CryptoWatchlistTicker> ->
             println("New ticker list: ${newTickerList.size}")
 
             if (currentTickerList == newTickerList) return@collect
-            currentTickerList = newTickerList
 
-            jobSubscription?.cancel()
+            //unsubscribe
+            if (currentTickerList.isNotEmpty()) {
+                jobUnsubscribe = jobUnsubscribeTickers(currentTickerList)
+                jobUnsubscribe?.start()
+            }
+
+            currentTickerList = newTickerList
             if (newTickerList.isEmpty()) return@collect
 
-            jobSubscription = jobSubscribeOnTicker(newTickerList)
-            jobSubscription?.start()
-
+            //Subscribe
+            jobSubscribe?.cancel()
+            jobSubscribe = jobSubscribeOnTicker(newTickerList)
+            jobSubscribe?.start()
         }
     }
 }
