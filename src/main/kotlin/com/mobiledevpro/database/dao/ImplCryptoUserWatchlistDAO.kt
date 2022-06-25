@@ -36,6 +36,13 @@ class ImplCryptoUserWatchlistDAO : CryptoUserWatchlistDAO {
             symbol
         ).let(CryptoUserWatchlistTable::isExist)
     }
+
+    /**
+     * Check is symbol exist for any user
+     */
+    override suspend fun isExist(symbol: String): Boolean = dbQuery {
+        CryptoUserWatchlistTable.isExist(symbol)
+    }
 }
 
 //TODO: integrate DI and move this line to DI

@@ -41,6 +41,19 @@ object CryptoUserWatchlistTable : Table("crypto_user_watchlist") {
             false
         }
 
+    /**
+     * Check is symbol exist for any user
+     */
+    fun isExist(symbol: String): Boolean =
+        try {
+            CryptoUserWatchlistTable
+                .select { CryptoUserWatchlistTable.symbol eq symbol }
+                .groupBy { CryptoUserWatchlistTable.symbol }.isNotEmpty()
+
+        } catch (e: Exception) {
+            false
+        }
+
     fun deleteBy(ticker: CryptoUserWatchlistTicker): Int =
         CryptoUserWatchlistTable.deleteWhere {
             (userId eq ticker.userUid) and (symbol eq ticker.symbol)

@@ -2,7 +2,10 @@ package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 
 import com.mobiledevpro.core.extension.errorRespond
 import com.mobiledevpro.core.extension.successRespond
+import com.mobiledevpro.core.models.None
+import com.mobiledevpro.core.models.watchlistInsertDeleteChannel
 import com.mobiledevpro.database.dao.cryptoUserWatchlistDAO
+import com.mobiledevpro.database.dao.cryptoWatchlistDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -23,6 +26,20 @@ fun Route.cryptoUserWatchlistDelete(path: String) {
                 .let { isExist ->
                     if (isExist)
                         cryptoUserWatchlistDAO.delete(userId, symbol)
+                            .let { isDeleted ->
+                                //Check does this symbol exist for any other user
+                                cryptoUserWatchlistDAO.isExist(symbol)
+                                    .also { isExist ->
+                                        if (!isExist) {
+                                            //delete symbol from tickers list to getting price updates
+                                            cryptoWatchlistDAO.delete(symbol)
+                                            //notify BinanceTickersModule to re-subscribe on price updates
+                                            watchlistInsertDeleteChannel.send(None())
+                                        }
+                                    }
+
+                                isDeleted
+                            }
                             .let { isDeleted ->
                                 if (isDeleted)
                                     return@delete successRespond(

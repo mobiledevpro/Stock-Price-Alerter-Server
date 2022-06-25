@@ -1,5 +1,6 @@
 package com.mobiledevpro.core.module
 
+import com.mobiledevpro.core.models.watchlistInsertDeleteChannel
 import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTicker
 import com.mobiledevpro.feature.crypto.watchlist.repository.cryptoWatchlistRepository
 import com.mobiledevpro.network.binance.BinanceSocketClientFactory
@@ -8,30 +9,22 @@ import com.mobiledevpro.network.binance.model.BinanceSocket
 import io.ktor.server.application.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.time.delay
 import java.time.Duration
 
 fun Application.binanceTickersModule() {
     BinanceSocketClientFactory.init(environment.config)
 
-    val cachedWatchlistFlow = channelFlow<List<CryptoWatchlistTicker>> {
-        val tickerListOne = listOf<CryptoWatchlistTicker>(
-            CryptoWatchlistTicker("BTCUSDT"),
-            CryptoWatchlistTicker("ETHUSDT")
-        )
+    val cachedWatchlistFlow = flow<List<CryptoWatchlistTicker>> {
 
-        val tickerListTwo = listOf<CryptoWatchlistTicker>(
-            CryptoWatchlistTicker("BTCUSDT"),
-            CryptoWatchlistTicker("XRPUSDT")
-        )
-
-        //for debug
         while (true) {
-            send(tickerListOne)
-            delay(Duration.ofSeconds(20))
-            send(tickerListTwo)
-            delay(Duration.ofSeconds(20))
+            cryptoWatchlistRepository.getTickerListLocal()
+                .also { list -> emit(list) }
+
+            //receive an event watchlist was changed
+            watchlistInsertDeleteChannel.receive()
+            println("Receive from channel")
         }
     }
 
@@ -45,7 +38,7 @@ fun Application.binanceTickersModule() {
     //Job to subscribe on tickers price change
     val jobSubscribeOnTicker: (List<CryptoWatchlistTicker>) -> Job = { tickerList ->
         launch(Dispatchers.IO, CoroutineStart.LAZY) {
-            cryptoWatchlistRepository.createTickerRequest(BinanceSocket.Method.SUBSCRIBE, tickerList)
+            cryptoWatchlistRepository.createTickerRequestRemote(BinanceSocket.Method.SUBSCRIBE, tickerList)
                 .also { request ->
                     delay(Duration.ofSeconds(3))
                     println("Call request ${request.method}")
@@ -74,6 +67,8 @@ fun Application.binanceTickersModule() {
             currentTickerList = newTickerList
 
             jobSubscription?.cancel()
+            if (newTickerList.isEmpty()) return@collect
+
             jobSubscription = jobSubscribeOnTicker(newTickerList)
             jobSubscription?.start()
 

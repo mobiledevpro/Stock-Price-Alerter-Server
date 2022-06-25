@@ -2,6 +2,8 @@ package com.mobiledevpro.feature.crypto.userwatchlist.remote.route
 
 import com.mobiledevpro.core.extension.errorRespond
 import com.mobiledevpro.core.extension.successRespond
+import com.mobiledevpro.core.models.None
+import com.mobiledevpro.core.models.watchlistInsertDeleteChannel
 import com.mobiledevpro.database.dao.cryptoExchangeDAO
 import com.mobiledevpro.database.dao.cryptoUserWatchlistDAO
 import com.mobiledevpro.database.dao.cryptoWatchlistDAO
@@ -40,6 +42,9 @@ fun Route.cryptoUserWatchlistAdd(path: String) {
                 if (!dao.isExist(symbol))
                     dao.add(symbol)
             }
+
+            //notify BinanceTickersModule to re-subscribe on price updates
+            watchlistInsertDeleteChannel.send(None())
 
             //Add ticker to user's watchlist table
             cryptoUserWatchlistDAO.add(userId, symbol)
