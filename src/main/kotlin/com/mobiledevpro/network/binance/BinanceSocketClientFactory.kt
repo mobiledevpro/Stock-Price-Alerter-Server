@@ -1,11 +1,14 @@
 package com.mobiledevpro.network.binance
 
-import com.mobiledevpro.network.binance.model.BinanceSocketRequest
+import com.mobiledevpro.network.binance.model.BinanceSocket
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.server.config.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -21,19 +24,14 @@ object BinanceSocketClientFactory {
     fun init(config: ApplicationConfig) {
         binanceSocketClient = HttpClient(OkHttp) {
             install(WebSockets) {
-                this.pingInterval = 1000
+                this.pingInterval = 5000
             }
         }
     }
 
-    suspend fun HttpClient.subscribe() {
-        val request = BinanceSocketRequest(
-            method = "SUBSCRIBE",
-            params = arrayOf("btcusdt@ticker"/*, "ethusdt@bookTicker"*/),
-            1
-        )
-
+    suspend fun HttpClient.subscribe(request: BinanceSocket.Request) = flow<Frame.Text> {
         wss(host = HOST, path = "/ws") {
+            println("Send ${request.method}")
 
             Json.encodeToString(request)
                 .let(Frame::Text)
@@ -42,23 +40,30 @@ object BinanceSocketClientFactory {
                 }
 
             while (true) {
+                if (!isActive) break
                 try {
                     val othersMessage = incoming.receive() as? Frame.Text
-                    println(othersMessage?.readText())
-                    /*  val myMessage = Scanner(System.`in`).next()
-                              if(myMessage != null) {
-                                  send(myMessage)
-                              }*/
+                    othersMessage?.let {
+                        emit(it)
+                    }
                 } catch (e: Exception) {
                     println("WebSocket exception: ${e.localizedMessage}")
                 }
             }
 
         }
-    }
+    }.cancellable()
 
-    suspend fun HttpClient.unsubscribe() {
+    suspend fun HttpClient.unsubscribe(request: BinanceSocket.Request) {
+        wss(host = HOST, path = "/ws") {
+            println("Send ${request.method}")
 
+            Json.encodeToString(request)
+                .let(Frame::Text)
+                .let {
+                    send(it)
+                }
+        }
     }
 
     private const val HOST = "stream.binancefuture.com"
