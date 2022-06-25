@@ -2,26 +2,24 @@ package com.mobiledevpro.database.dao
 
 import com.mobiledevpro.database.DatabaseFactory.dbQuery
 import com.mobiledevpro.database.model.CryptoWatchlistTable
-import com.mobiledevpro.feature.cryptowatchlist.local.CryptoWatchlistTicker
+import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTicker
 
 class ImplCryptoWatchlistDAO : CryptoWatchlistDAO {
 
-    override suspend fun select(userUid: String): List<CryptoWatchlistTicker> = dbQuery {
-        CryptoWatchlistTable.selectBy(userUid)
+    override suspend fun select(): List<CryptoWatchlistTicker> = dbQuery {
+        CryptoWatchlistTable.select()
     }
 
-    override suspend fun add(userUid: String, symbol: String): Boolean = dbQuery {
+    override suspend fun add(symbol: String): Boolean = dbQuery {
         CryptoWatchlistTicker(
-            userUid,
             symbol
         ).let(CryptoWatchlistTable::insert)
 
         true
     }
 
-    override suspend fun delete(userUid: String, symbol: String): Boolean = dbQuery {
+    override suspend fun delete(symbol: String): Boolean = dbQuery {
         CryptoWatchlistTicker(
-            userUid,
             symbol
         )
             .let(CryptoWatchlistTable::deleteBy)
@@ -30,9 +28,8 @@ class ImplCryptoWatchlistDAO : CryptoWatchlistDAO {
             }
     }
 
-    override suspend fun isExist(userUid: String, symbol: String): Boolean = dbQuery {
+    override suspend fun isExist(symbol: String): Boolean = dbQuery {
         CryptoWatchlistTicker(
-            userUid,
             symbol
         ).let(CryptoWatchlistTable::isExist)
     }

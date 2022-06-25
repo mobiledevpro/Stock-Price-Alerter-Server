@@ -1,8 +1,8 @@
 package com.mobiledevpro.core.plugins
 
 import com.mobiledevpro.core.models.Version
-import com.mobiledevpro.feature.cryptocoin.remote.route.cryptoCoin
-import com.mobiledevpro.feature.cryptowatchlist.remote.route.cryptoWatchlist
+import com.mobiledevpro.feature.crypto.exchange.remote.route.cryptoExchange
+import com.mobiledevpro.feature.crypto.userwatchlist.remote.route.cryptoUserWatchlist
 
 import com.mobiledevpro.feature.customer.remote.route.customerRoute
 import io.ktor.server.application.*
@@ -27,7 +27,7 @@ fun Application.configureRouting(version: Version) {
 private fun Routing.configV1() {
     route("v1") {
         customerRoute()
-        cryptoCoin()
-        cryptoWatchlist()
+        cryptoExchange()
+        cryptoUserWatchlist()
     }
 }
