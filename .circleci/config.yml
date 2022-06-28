@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
   gradle: circleci/gradle@2.2.0
+  eventuate-gradle-build-and-test: eventuate_io/eventuate-gradle-build-and-test@0.2.1
   orb-tools: circleci/orb-tools@10
 
 #config_env: &config_env
@@ -46,16 +47,20 @@ jobs:
              echo Heroku successfully installed.
             fi
       - heroku/check-authentication
-      - run: chmod +x gradlew
+      # - run: chmod +x gradlew
       - run: ./gradlew dependencies
-      - run:
-          name: Run tests
-          command: ./gradlew :test
-      - store_test_results:
-          path: test-results
-      - store_artifacts:
-          path: test-results
-          destination: reports/
+      - eventuate-gradle-build-and-test/build-and-test:
+          name: test-build-and-test
+          project_name: test-orb
+          script: ./gradlew :test
+      #- run:
+      #    name: Run tests
+      #    command: ./gradlew :test
+      # - store_test_results:
+      #     path: test-results
+      # - store_artifacts:
+      #     path: test-results
+      #     destination: reports/
 
 filter_tag_version_only: &filter_tag_version_only
   filters:
