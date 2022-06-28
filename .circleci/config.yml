@@ -77,7 +77,14 @@ workflows:
 
   run_tests:
     jobs:
-      - eventuate-gradle-build-and-test/build-and-test:
-          name: Run tests
-          project_name: test-orb
-          script: ./gradlew :test
+      - gradle/test
+
+
+
+        #- eventuate-gradle-build-and-test/build-and-test:
+        #    name: Run tests
+        #    project_name: test-orb
+        #    script: ./gradlew :test
+
+
+      #https://circleci.com/developer/orbs/orb/eventuate_io/eventuate-gradle-build-and-test
