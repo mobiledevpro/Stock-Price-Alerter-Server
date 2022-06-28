@@ -31,36 +31,6 @@ jobs:
           force: true
           app-name: stock-price-alerter
 
-  job_run_tests:
-    executor: heroku/default
-    # <<: *config_env
-    steps:
-      - checkout
-      - heroku/install
-      - run:
-          name: Check if Heroku is installed
-          command: |
-            if [[ $(command -v heroku) == "" ]]; then
-             echo "Heroku is not installed!"; exit 1;
-            else
-             echo Heroku successfully installed.
-            fi
-      - heroku/check-authentication
-      # - run: chmod +x gradlew
-      - run: ./gradlew dependencies
-      - eventuate-gradle-build-and-test/build-and-test:
-          name: Run tests
-          project_name: test-orb
-          script: ./gradlew :test
-      #- run:
-      #    name: Run tests
-      #    command: ./gradlew :test
-      # - store_test_results:
-      #     path: test-results
-      # - store_artifacts:
-      #     path: test-results
-      #     destination: reports/
-
 filter_tag_version_only: &filter_tag_version_only
   filters:
     tags:
@@ -76,6 +46,7 @@ workflows:
 
   run_tests:
     jobs:
-      - gradle/test
-
-      #https://circleci.com/developer/orbs/orb/eventuate_io/eventuate-gradle-build-and-test
+      - gradle/test:
+          store_artifacts: build/reports/
+          test_command: Tests
+          test_results_path: build/test-results/
