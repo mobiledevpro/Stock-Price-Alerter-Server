@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
-  openjdk-install: cloudesire/openjdk-install@1.2.3
+  gradle: circleci/gradle@2.2.0
   orb-tools: circleci/orb-tools@10
 
 #config_env: &config_env
