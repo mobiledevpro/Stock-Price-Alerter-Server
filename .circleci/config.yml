@@ -26,6 +26,29 @@ jobs:
           force: true
           app-name: stock-price-alerter
 
+  job_run_tests:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: Check if Heroku is installed
+          command: |
+            if [[ $(command -v heroku) == "" ]]; then
+             echo "Heroku is not installed!"; exit 1;
+            else
+             echo Heroku successfully installed.
+            fi
+      - heroku/check-authentication
+      - run:
+          name: Run tests
+          command: ./gradlew :test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: reports/
+
 filter_tag_version_only: &filter_tag_version_only
   filters:
     tags:
@@ -38,3 +61,7 @@ workflows:
     jobs:
       - job_deploy:
           <<: *filter_tag_version_only
+
+  run_tests:
+    jobs:
+      - job_run_tests

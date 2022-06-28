@@ -14,6 +14,7 @@
 - [x] ~~[Create endpoint to GET all available crypto coins with a search filter](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/10)~~
 - [x] ~~[Create endpoint to PUT crypto coin to watchlist](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/13)~~
 - [x] ~~[Connect to Binance web socket and subscribe on price changes for watchlist](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/17)~~
+- [ ] [Create Web Socket to connect mobile app to](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/20)
 - [ ] [Create endpoint to PUT alert settings for selected crypto coin](https://github.com/mobiledevpro/Stock-Price-Alerter-Server/issues/14)
 - [ ] [Create endpoint to PUT Firebase device token + user uuid to get push-notifications]
 - [ ] [Setup Firebase notifications at the server side]
