@@ -50,7 +50,7 @@ jobs:
       # - run: chmod +x gradlew
       - run: ./gradlew dependencies
       - eventuate-gradle-build-and-test/build-and-test:
-          name: test-build-and-test
+          name: Run tests
           project_name: test-orb
           script: ./gradlew :test
       #- run:
