@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
   gradle: circleci/gradle@2.2.0
-  eventuate-gradle-build-and-test: eventuate_io/eventuate-gradle-build-and-test@0.2.1
   orb-tools: circleci/orb-tools@10
 
 #config_env: &config_env
@@ -78,13 +77,5 @@ workflows:
   run_tests:
     jobs:
       - gradle/test
-
-
-
-        #- eventuate-gradle-build-and-test/build-and-test:
-        #    name: Run tests
-        #    project_name: test-orb
-        #    script: ./gradlew :test
-
 
       #https://circleci.com/developer/orbs/orb/eventuate_io/eventuate-gradle-build-and-test
