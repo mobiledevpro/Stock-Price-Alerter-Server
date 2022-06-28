@@ -3,6 +3,10 @@ orbs:
   heroku: circleci/heroku@1.2.6
   orb-tools: circleci/orb-tools@10
 
+config_env: &config_env
+  environment:
+    JAVA_HOME: "/usr/lib/jvm/java-11-openjdk-amd64"
+
 jobs:
   job_deploy:
     executor: heroku/default
@@ -28,6 +32,7 @@ jobs:
 
   job_run_tests:
     executor: heroku/default
+    <<: *config_env
     steps:
       - checkout
       - heroku/install
