@@ -23,9 +23,9 @@ jobs:
           command: >
             echo "The command above installs Heroku, the command below deploys.
             What you do inbetween is up to you!"
-      - heroku/deploy-via-git:
-          force: true
-          app-name: stock-price-alerter
+      # - heroku/deploy-via-git:
+      #     force: true
+      #     app-name: stock-price-alerter
 
 filter_tag_version_only: &filter_tag_version_only
   filters:
