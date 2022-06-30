@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
+  gradle: circleci/gradle@2.2.0
   orb-tools: circleci/orb-tools@10
 
 jobs:
@@ -36,5 +37,12 @@ filter_tag_version_only: &filter_tag_version_only
 workflows:
   heroku_deploy:
     jobs:
+      - gradle/test:
+          <<: *filter_tag_version_only
       - job_deploy:
           <<: *filter_tag_version_only
+          requires:
+            - gradle/test
+  run_tests:
+    jobs:
+      - gradle/test
