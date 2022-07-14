@@ -7,4 +7,5 @@ interface CryptoWatchlistDAO {
     suspend fun add(symbol: String): Boolean
     suspend fun delete(symbol: String): Boolean
     suspend fun isExist(symbol: String): Boolean
+    suspend fun update(ticker: CryptoWatchlistTicker): Boolean
 }

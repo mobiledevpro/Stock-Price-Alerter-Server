@@ -33,6 +33,10 @@ class ImplCryptoWatchlistDAO : CryptoWatchlistDAO {
             symbol
         ).let(CryptoWatchlistTable::isExist)
     }
+
+    override suspend fun update(ticker: CryptoWatchlistTicker) = dbQuery {
+        CryptoWatchlistTable.update(ticker) > 0
+    }
 }
 
 //TODO: integrate DI and move this line to DI

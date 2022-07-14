@@ -22,8 +22,14 @@ object CryptoUserWatchlistTable : Table("crypto_user_watchlist") {
 
     fun selectBy(userId: String): List<CryptoUserWatchlistTicker> =
         try {
-            CryptoUserWatchlistTable
-                .select { CryptoUserWatchlistTable.userId eq userId }
+            Join(
+                CryptoUserWatchlistTable, CryptoWatchlistTable,
+                joinType = JoinType.INNER,
+                onColumn = CryptoUserWatchlistTable.symbol,
+                otherColumn = CryptoWatchlistTable.symbol,
+                additionalConstraint = { CryptoUserWatchlistTable.userId eq userId }
+            )
+                .selectAll()
                 .map(ResultRow::toCryptoUserWatchlistTicker)
 
         } catch (e: Exception) {

@@ -1,8 +1,11 @@
 package com.mobiledevpro.core.module
 
 import com.mobiledevpro.core.models.watchlistInsertDeleteChannel
+import com.mobiledevpro.database.dao.cryptoWatchlistDAO
 import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTicker
+import com.mobiledevpro.feature.crypto.watchlist.remote.model.CryptoWatchlistTickerRemote
 import com.mobiledevpro.feature.crypto.watchlist.repository.cryptoWatchlistRepository
+import com.mobiledevpro.feature.crypto.watchlist.toLocal
 import com.mobiledevpro.network.binance.BinanceSocketClientFactory
 import com.mobiledevpro.network.binance.BinanceSocketClientFactory.subscribe
 import com.mobiledevpro.network.binance.BinanceSocketClientFactory.unsubscribe
@@ -15,10 +18,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import java.text.SimpleDateFormat
 import java.time.Duration
+import java.util.*
 
 fun Application.binanceTickersModule() {
     BinanceSocketClientFactory.init(environment.config)
+
+    val jsonFormat = Json { ignoreUnknownKeys = true }
+    val dateFormat = SimpleDateFormat("MMM d, HH:mm:ss")
 
     val cachedWatchlistFlow = flow<List<CryptoWatchlistTicker>> {
 
@@ -33,9 +43,16 @@ fun Application.binanceTickersModule() {
     }
 
     //Job to cache ticker price to database
-    val jobCacheTickerPrice: (List<CryptoWatchlistTicker>) -> Job = { tickerList ->
+    val jobCacheTickerPrice: (CryptoWatchlistTicker) -> Job = { ticker ->
         launch(Dispatchers.IO, CoroutineStart.LAZY) {
-            println("Cache data to database: list ${tickerList.size}")
+            println(
+                "Cache data to database: ${ticker.symbol} " +
+                        "| Last price: ${ticker.lastPrice} " +
+                        "| 24h price change: ${ticker.priceChange} (${ticker.priceChangePercent} %) " +
+                        "| Updated at ${dateFormat.format(Date(ticker.updateTime))}"
+            )
+
+            cryptoWatchlistDAO.update(ticker)
         }
     }
 
@@ -48,10 +65,18 @@ fun Application.binanceTickersModule() {
                     println("Call request ${request.method}")
                     BinanceSocketClientFactory.binanceSocketClient.subscribe(request)
                         .collect { textFrame: Frame.Text? ->
-                            // coroutineContext.ensureActive()
-                            println(textFrame?.readText())
-                            //TODO: cache to table
-                            jobCacheTickerPrice(tickerList).start()
+                            //Parse incoming json and save ticker to database
+                            try {
+                                textFrame?.readText()?.let { jsonStr ->
+                                    jsonFormat
+                                        .decodeFromString<CryptoWatchlistTickerRemote>(jsonStr)
+                                }?.also { ticker ->
+                                    //Update ticker in the database
+                                    jobCacheTickerPrice(ticker.toLocal()).start()
+                                }
+                            } catch (e: Exception) {
+                                println("Parse and cache ticker exception: ${e.localizedMessage}")
+                            }
                         }
                 }
         }
@@ -74,7 +99,7 @@ fun Application.binanceTickersModule() {
     launch(Dispatchers.IO) {
 
         var jobSubscribe: Job? = null
-        var jobUnsubscribe: Job? = null
+        var jobUnsubscribe: Job?
         var currentTickerList: List<CryptoWatchlistTicker> = emptyList()
 
         cachedWatchlistFlow.collect { newTickerList: List<CryptoWatchlistTicker> ->

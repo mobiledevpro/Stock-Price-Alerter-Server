@@ -54,6 +54,7 @@ dependencies {
 
     //Web socket client
     implementation("io.ktor:ktor-client-websockets-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-websockets-jvm:$ktorVersion")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
