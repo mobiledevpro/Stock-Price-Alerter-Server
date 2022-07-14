@@ -1,6 +1,7 @@
 package com.mobiledevpro.core.module
 
 import com.mobiledevpro.core.models.watchlistInsertDeleteChannel
+import com.mobiledevpro.database.dao.cryptoWatchlistDAO
 import com.mobiledevpro.feature.crypto.watchlist.local.model.CryptoWatchlistTicker
 import com.mobiledevpro.feature.crypto.watchlist.remote.model.CryptoWatchlistTickerRemote
 import com.mobiledevpro.feature.crypto.watchlist.repository.cryptoWatchlistRepository
@@ -51,7 +52,7 @@ fun Application.binanceTickersModule() {
                         "| Updated at ${dateFormat.format(Date(ticker.updateTime))}"
             )
 
-
+            cryptoWatchlistDAO.update(ticker)
         }
     }
 
@@ -98,7 +99,7 @@ fun Application.binanceTickersModule() {
     launch(Dispatchers.IO) {
 
         var jobSubscribe: Job? = null
-        var jobUnsubscribe: Job? = null
+        var jobUnsubscribe: Job?
         var currentTickerList: List<CryptoWatchlistTicker> = emptyList()
 
         cachedWatchlistFlow.collect { newTickerList: List<CryptoWatchlistTicker> ->
