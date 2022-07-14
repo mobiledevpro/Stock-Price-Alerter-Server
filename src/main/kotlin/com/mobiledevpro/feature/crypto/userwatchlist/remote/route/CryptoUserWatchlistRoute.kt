@@ -7,4 +7,5 @@ fun Route.cryptoUserWatchlist() {
     cryptoUserWatchlistAdd(path)
     cryptoUserWatchlistDelete(path)
     cryptoUserWatchlistGet(path)
+    cryptoUserWatchlistSocket(path)
 }

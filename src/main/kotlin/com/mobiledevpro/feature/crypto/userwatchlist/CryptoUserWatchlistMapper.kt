@@ -20,3 +20,6 @@ fun CryptoUserWatchlistTicker.toRemote(): CryptoUserWatchlistRemote =
     CryptoUserWatchlistRemote(
         symbol, lastPrice, priceChange, priceChangePercent, updateTime
     )
+
+fun List<CryptoUserWatchlistTicker>.toRemote() =
+    mapTo(ArrayList<CryptoUserWatchlistRemote>(), CryptoUserWatchlistTicker::toRemote)
