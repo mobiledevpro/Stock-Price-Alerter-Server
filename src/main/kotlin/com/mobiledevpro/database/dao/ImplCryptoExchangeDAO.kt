@@ -22,9 +22,10 @@ class ImplCryptoExchangeDAO : CryptoExchangeDAO {
             CryptoExchangeTable.delete()
             for (coin in list)
                 CryptoExchangeTable.insert(coin)
-        }
 
-        false
+            true
+        } else
+            false
     }
 
 }

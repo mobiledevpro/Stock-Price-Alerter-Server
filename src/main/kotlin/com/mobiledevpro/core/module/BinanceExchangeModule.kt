@@ -8,10 +8,7 @@ import com.mobiledevpro.network.binance.model.BinanceExchange
 import com.mobiledevpro.network.binance.model.BinanceExchangeSymbol
 import io.ktor.client.call.*
 import io.ktor.server.application.*
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import java.time.Duration
 
@@ -19,10 +16,9 @@ fun Application.binanceExchangeInfoModule() {
     BinanceHTTPClientFactory.init(environment.config)
 
     launch {
-        while (true) {
-            println("-----------------")
-            val binanceExchangeInfoDeferred: Deferred<BinanceExchange> = async(Dispatchers.IO) {
-                println("Getting Exchange info")
+
+        val getExchangeInfo: () -> Deferred<BinanceExchange> = {
+            async(Dispatchers.IO, CoroutineStart.LAZY) {
                 BinanceHTTPClientFactory.binanceHttpClient.getExchangeInfo().let { it ->
                     println("Response time: ${(it.responseTime.timestamp - it.requestTime.timestamp)} ms")
 
@@ -37,31 +33,36 @@ fun Application.binanceExchangeInfoModule() {
 
                     body
                 }
-
             }
+        }
 
+        val jobCacheExchangeInfo: (BinanceExchange) -> Job = { binanceExchangeInfo ->
+            launch(Dispatchers.IO, CoroutineStart.LAZY) {
+                //Save to database
+                binanceExchangeInfo.symbols
+                    .map(BinanceExchangeSymbol::toCryptoExchange)
+                    .let { coinList ->
+                        cryptoExchangeDAO.add(coinList)
+                    }.also { cached ->
+                        println("Exchange info is ${if (cached) "cached" else "NOT cached"} to database")
+                    }
+            }
+        }
+
+        while (true) {
+            println("---------START---------")
             try {
-                val binanceExchangeInfo: BinanceExchange = binanceExchangeInfoDeferred.await()
-
-                val cacheExchangeInfoDeferred = async(Dispatchers.IO) {
-                    //Save to database
-                    binanceExchangeInfo.symbols
-                        .map(BinanceExchangeSymbol::toCryptoExchange)
-                        .let { coinList ->
-                            cryptoExchangeDAO.add(coinList)
-                        }
-
-                    true
-                }
-
-                val isExchangeInfoCached: Boolean = cacheExchangeInfoDeferred.await()
-                println("Exchange info is ${if (isExchangeInfoCached) "cached" else "NOT cached"} to database")
+                println("Getting Exchange info")
+                getExchangeInfo().await()
+                    .also { binanceExchangeInfo ->
+                        jobCacheExchangeInfo(binanceExchangeInfo).start()
+                    }
 
             } catch (e: Exception) {
                 println("EXCEPTION: ${e.localizedMessage}")
             }
 
-            println("-----------------")
+            println("----------END----------")
             println("Next update in 1 hour")
             delay(Duration.ofHours(1))
         }
